@@ -32,7 +32,7 @@ class UserController extends Controller
     public function delete(int $userId): RedirectResponse
     {
         $user = new User();
-        $user->userDelete($userId);
+        $user->deleteUser($userId);
         return redirect()->route('home');
     }
 

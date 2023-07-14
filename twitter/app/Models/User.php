@@ -94,9 +94,9 @@ class User extends Authenticatable
     /**
      * ユーザー削除する。
      */
-    public function userDelete($userId): void
+    public function deleteUser($userId): void
     {
         $user = $this->findByUserId($userId);
-        $user -> delete();
+        $user->delete();
     }
 }
