@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class Tweet extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     /**
      * ユーザーデーブルとリレーションをはる
@@ -58,5 +60,14 @@ class Tweet extends Model
         $tweetInfo = $this->findByTweetId($tweetId);
         $tweetInfo->tweet = $request->tweet;
         $tweetInfo->save();
+    }
+
+    /**
+     * ツイート削除
+     */
+    public function deleteTweet(int $tweetId): void
+    {
+        $tweet = $this->findByTweetId($tweetId);
+        $tweet->delete();
     }
 }

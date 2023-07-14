@@ -34,4 +34,5 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/tweets', [App\Http\Controllers\TweetController::class, 'index'])->name('tweets.index');
     Route::get('/tweets/{id}', [App\Http\Controllers\TweetController::class, 'findByTweetId'])->name('tweets.show');
     Route::post('/tweets/{id}', [App\Http\Controllers\TweetController::class, 'update'])->name('tweets.update');
+    Route::delete('/tweets/{id}', [App\Http\Controllers\TweetController::class, 'delete'])->name('tweets.delete');
 });

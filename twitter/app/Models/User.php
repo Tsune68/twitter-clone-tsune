@@ -90,4 +90,13 @@ class User extends Authenticatable
         $allUsers = User::all()->sortByDesc('created_at');
         return $allUsers;
     }
+
+    /**
+     * ユーザー削除する。
+     */
+    public function deleteUser($userId): void
+    {
+        $user = $this->findByUserId($userId);
+        $user->delete();
+    }
 }

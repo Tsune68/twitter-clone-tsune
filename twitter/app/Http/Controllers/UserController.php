@@ -29,9 +29,10 @@ class UserController extends Controller
         return redirect()->route('users.show', ['id' => $userId]);
     }
 
-    public function delete(int $userId)
+    public function delete(int $userId): RedirectResponse
     {
-        User::find($userId)->delete();
+        $user = new User();
+        $user->deleteUser($userId);
         return redirect()->route('home');
     }
 

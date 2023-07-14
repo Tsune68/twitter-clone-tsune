@@ -41,23 +41,31 @@ class TweetController extends Controller
     /**
      * ツイート詳細を表示する
      */
-
     public function findByTweetId(int $tweetId): View
     {
-        $tweet = new Tweet();
-        $tweetInfo = $tweet->findByTweetId($tweetId);
+        $tweetModel = new Tweet();
+        $tweet = $tweetModel->findByTweetId($tweetId);
 
-        return view('tweets.show', compact('tweetInfo'));
+        return view('tweets.show', compact('tweet'));
     }
 
     /**
      * ツイートを更新する
      */
-
     public function update(CreateTweetRequest $request, int $tweetId): RedirectResponse
     {
         $tweet = new Tweet();
         $tweet->updateTweet($tweetId, $request);
+        return redirect()->route('tweets.index');
+    }
+
+    /**
+     * ツイート削除する
+     */
+    public function delete(int $tweetId): RedirectResponse
+    {
+        $tweet = new Tweet();
+        $tweet->deleteTweet($tweetId);
         return redirect()->route('tweets.index');
     }
 }
