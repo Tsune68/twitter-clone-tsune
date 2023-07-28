@@ -130,8 +130,6 @@ class User extends Authenticatable
         return true;
     }
 
-
-
     /**
      * フォローを解除する
      */
