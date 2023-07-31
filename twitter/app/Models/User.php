@@ -5,12 +5,14 @@ namespace App\Models;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -47,10 +49,24 @@ class User extends Authenticatable
     ];
 
 
+    // tweetテーブルにリレーション張る
     public function tweet(): HasMany
     {
         return $this->hasMany('App\Models\Tweet');
     }
+
+    // followersテーブルにリレーション張る（フォローしている人を取得）
+    public function follows(): BelongsToMany
+    {
+        return $this->belongsToMany('App\Models\User', 'followers', 'follow_user_id', 'follower_user_id');
+    }
+
+    // followersテーブルにリレーション張る（自分のことをフォローしている人を取得）
+    public function followers(): BelongsToMany
+    {
+        return $this->belongsToMany('App\Models\User', 'followers', 'follower_user_id', 'follow_user_id');
+    }
+
 
     /**
      * 特定のユーザーを取得
@@ -59,7 +75,7 @@ class User extends Authenticatable
     {
         $userDetail = $this->find($userId);
         if (is_null($userDetail)) abort(404);
-        
+
         return $userDetail;
     }
 
@@ -98,5 +114,37 @@ class User extends Authenticatable
     {
         $user = $this->findByUserId($userId);
         $user->delete();
+    }
+
+    /**
+     * ユーザーフォローする。
+     */
+    public function follow($userId): bool
+    {
+        $follower = $this->findByUserId($userId);
+        $user = Auth::user();
+        Follower::create([
+            'follow_user_id' => $user->id,
+            'follower_user_id' => $follower->id,
+        ]);
+        return true;
+    }
+
+    /**
+     * フォローを解除する
+     */
+    public function unfollow($userId): bool
+    {
+        $follower = $this->findByUserId($userId);
+        $user = Auth::user();
+        $record = Follower::where('follow_user_id', $user->id)
+            ->where('follower_user_id', $follower->id)
+            ->first();
+
+        if ($record) {
+            $record->delete();
+            return true;
+        }
+        return false;
     }
 }

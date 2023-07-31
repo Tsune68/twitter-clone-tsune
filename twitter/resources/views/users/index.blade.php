@@ -16,7 +16,26 @@
                 @foreach ($allUsers as $user)
                 <tr>
                     <td>{{ $user->id }}</td>
-                    <td>{{ $user->name }}</td>
+                    <td>
+                        {{ $user->name }}
+                        @if (Auth::id() !== $user->id)
+                            @if (Auth::user()->follows->contains('id', $user->id))
+                            <form id="follow-{{ $user->id }}" method="POST" action="{{ route('users.unfollow', ['id' => $user->id]) }}">
+                                @csrf
+                                <button type="submit">
+                                    フォロー外す
+                                </button>
+                            </form>
+                            @else
+                            <form id="follow-{{ $user->id }}" method="POST" action="{{ route('users.follow', ['id' => $user->id]) }}">
+                                @csrf
+                                <button type="submit">
+                                    フォローする
+                                </button>
+                            </form>
+                            @endif
+                        @endif
+                    </td>
                     <td>{{ $user->email }}</td>
                 </tr>
                 @endforeach
