@@ -15,6 +15,12 @@
     <p class="border-bottom">ユーザーID:{{ $userInfo->id }}</p>
     <p class="border-bottom">ユーザー名: {{ $userInfo->name }}</p>
     <p class="border-bottom">メールアドレス: {{ $userInfo->email }}</p>
+    <p class="border-bottom">
+        フォロワー数:
+        <a href="{{ route('users.followers', ['id' => $userInfo->id]) }}">
+            {{ $userInfo->followers->count() }}フォロワー
+        </a>
+    </p>
 </div>
 
 <body>
