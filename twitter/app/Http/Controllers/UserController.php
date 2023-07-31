@@ -86,4 +86,15 @@ class UserController extends Controller
 
         return view('users.followers', compact('allFollowers'));
     }
+
+    /**
+     * 特定のユーザーがフォローしているユーザーをすべて取得する
+     */
+    public function showAllFollows(int $userId): View
+    {
+        $user = new User();
+        $allFollows = $user->getAllFollows($userId);
+
+        return view('users.follows', compact('allFollows'));
+    }
 }

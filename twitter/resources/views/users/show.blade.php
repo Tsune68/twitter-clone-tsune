@@ -21,6 +21,12 @@
             {{ $userInfo->followers->count() }}フォロワー
         </a>
     </p>
+    <p class="border-bottom">
+        フォロー数:
+        <a href="{{ route('users.follows', ['id' => $userInfo->id]) }}">
+            {{ $userInfo->follows->count() }}フォロー
+        </a>
+    </p>
 </div>
 
 <body>

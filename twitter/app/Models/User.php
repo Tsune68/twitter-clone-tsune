@@ -158,4 +158,14 @@ class User extends Authenticatable
         return $allFollowers;
     }
 
+    /**
+     * 特定のユーザーがフォローしているユーザーをすべて取得する
+     */
+    public function getAllFollows(int $userId): Collection
+    {
+        $userInfo = $this->findByUserId($userId);
+        $allFollows = $userInfo->follows;
+        return $allFollows;
+    }
+
 }

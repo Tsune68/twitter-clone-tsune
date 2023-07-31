@@ -31,6 +31,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/users/follow/{id}', [App\Http\Controllers\UserController::class, 'follow'])->name('users.follow');
     Route::post('/users/unfollow/{id}', [App\Http\Controllers\UserController::class, 'unfollow'])->name('users.unfollow');
     Route::get('/users/followers/{id}', [App\Http\Controllers\UserController::class, 'showAllfollowers'])->name('users.followers');
+    Route::get('/users/follows/{id}', [App\Http\Controllers\UserController::class, 'showAllfollows'])->name('users.follows');
 
     Route::get('/tweets/create', [App\Http\Controllers\TweetController::class, 'create'])->name('tweets.create');
     Route::post('/tweets', [App\Http\Controllers\TweetController::class, 'store'])->name('tweets.store');
