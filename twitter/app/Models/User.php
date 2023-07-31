@@ -110,7 +110,7 @@ class User extends Authenticatable
     /**
      * ユーザー削除する。
      */
-    public function deleteUser($userId): void
+    public function deleteUser(int $userId): void
     {
         $user = $this->findByUserId($userId);
         $user->delete();
@@ -119,7 +119,7 @@ class User extends Authenticatable
     /**
      * ユーザーフォローする。
      */
-    public function follow($userId): bool
+    public function follow(int $userId): bool
     {
         $follower = $this->findByUserId($userId);
         $user = Auth::user();
@@ -133,7 +133,7 @@ class User extends Authenticatable
     /**
      * フォローを解除する
      */
-    public function unfollow($userId): bool
+    public function unfollow(int $userId): bool
     {
         $follower = $this->findByUserId($userId);
         $user = Auth::user();
@@ -147,4 +147,15 @@ class User extends Authenticatable
         }
         return false;
     }
+
+    /**
+     * 特定のユーザーのフォロワーをすべて取得する
+     */
+    public function getAllFollowers(int $userId): Collection
+    {
+        $userInfo = $this->findByUserId($userId);
+        $allFollowers = $userInfo->followers;
+        return $allFollowers;
+    }
+
 }

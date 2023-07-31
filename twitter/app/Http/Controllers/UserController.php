@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Contracts\View\View;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -58,20 +59,31 @@ class UserController extends Controller
     /**
      * ユーザーフォローする。
      */
-    public function follow($userId): RedirectResponse
+    public function follow(int $userId): RedirectResponse
     {
         $user = new User();
         $user->follow($userId);
         return redirect()->route('users.index');
     }
-    
+
     /**
      * フォローを解除する
      */
-    public function unfollow($userId): RedirectResponse
+    public function unfollow(int $userId): RedirectResponse
     {
         $user = new User();
         $user->unfollow($userId);
         return redirect()->route('users.index');
+    }
+
+    /**
+     * 特定のユーザーのフォロワーをすべて取得する
+     */
+    public function showAllFollowers(int $userId): View
+    {
+        $user = new User();
+        $allFollowers = $user->getAllFollowers($userId);
+
+        return view('users.followers', compact('allFollowers'));
     }
 }
