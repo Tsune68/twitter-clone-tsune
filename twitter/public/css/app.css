@@ -53,3 +53,18 @@
     width: 100%;
     min-height: 150px;
 }
+
+.search-wrap {
+    display: block;
+    margin-bottom: 50px;
+}
+
+.search-form {
+    position: relative;
+}
+
+.search-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
