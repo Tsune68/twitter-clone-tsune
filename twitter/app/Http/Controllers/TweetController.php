@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use App\Http\Requests\CreateTweetRequest;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -13,11 +14,16 @@ class TweetController extends Controller
     /**
      * ツイート一覧画面を表示
      */
-    public function index(): View
+    public function index(Request $request): View
     {
         $tweet = new Tweet();
-        $allTweets = $tweet->getAllTweets();
-        return view('tweets.index', compact('allTweets'));
+        $keyword = $request->input('keyword');
+        if(!empty($keyword)) {
+            $allTweets = $tweet->searchByQuery($keyword);
+        } else {
+            $allTweets = $tweet->getAllTweets();
+        }
+        return view('tweets.index', compact('allTweets', 'keyword'));
     }
 
     /**

@@ -70,4 +70,20 @@ class Tweet extends Model
         $tweet = $this->findByTweetId($tweetId);
         $tweet->delete();
     }
+
+    /**
+     * ツイート検索する
+     */
+    public function searchByQuery(string $keyword): Collection
+    {
+        if (!empty($keyword)) {
+            $keywordRemoveSpace = preg_replace('/\A[\p{C}\p{Z}]++|[\p{C}\p{Z}]++\z/u', '', $keyword);
+            $keywordUnifySpace =  mb_convert_kana($keywordRemoveSpace, 's');
+            $keywordArray = preg_split('/[\s]+/', $keywordUnifySpace);
+            foreach($keywordArray as $keyword) {
+                $searchdTweet = Tweet::orWhere('tweet', 'like', "%$keyword%")->get();
+            }
+            return $searchdTweet;
+        }
+    }
 }
