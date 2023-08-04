@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use App\Models\User;
 
 class Tweet extends Model
 {
@@ -114,4 +114,19 @@ class Tweet extends Model
             $this->favorites()->attach($userId);
         }
     }
+
+    /**
+     * いいねしたツイートを全て取得
+     * 
+     * @param int $userId
+     * @return Collection
+     */
+    public function getAllFavoriteTweets(int $userId): Collection
+    {
+        $user = new User();
+        $userInfo = $user->findByUserId($userId);
+        $AllFavoriteTweets = $userInfo->favorites;
+        return $AllFavoriteTweets;
+    }
+
 }

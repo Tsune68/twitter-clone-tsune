@@ -96,4 +96,20 @@ class TweetController extends Controller
         ];
         return response()->json($json);
     }
+
+    /**
+     * いいねした投稿全てを表示
+     * 
+     * @param int $userId
+     * @return View
+     */
+    public function showAllFavoriteTweets(int $userId): View
+    {
+        $tweet = new Tweet();
+        $AllFavoriteTweets = $tweet->getAllFavoriteTweets($userId);
+        foreach ($AllFavoriteTweets as $tweet) {
+            $tweet->isFavorite = $tweet->isFavorite($userId);
+        }
+        return view('tweets.favorite', compact('AllFavoriteTweets'));
+    }
 }
