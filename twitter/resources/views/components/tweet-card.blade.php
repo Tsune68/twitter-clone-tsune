@@ -8,6 +8,10 @@
             <small class="text-secondary">（編集済み）</small>
             @endif
         </p>
+        <div class="favorite-marke">
+            <a class="js-favorite-toggle {{ $tweet->isFavorite ? 'loved' : '' }}" href="" data-tweetid="{{ $tweet->id }}"><i class="fas fa-heart"></i></a>
+            <span class="favoritesCount">{{$tweet->favorites()->count()}}</span>
+        </div>
     </div>
     @if (Auth::id() === $tweet->user->id)
     <div class="tweet-dropdown">

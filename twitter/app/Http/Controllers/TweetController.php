@@ -7,6 +7,8 @@ use App\Http\Requests\CreateTweetRequest;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use App\Models\Tweet;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\JsonResponse;
 
 class TweetController extends Controller
 {
@@ -18,10 +20,11 @@ class TweetController extends Controller
     {
         $tweet = new Tweet();
         $keyword = $request->input('keyword');
-        if(!empty($keyword)) {
-            $allTweets = $tweet->searchByQuery($keyword);
-        } else {
-            $allTweets = $tweet->getAllTweets();
+        $allTweets = !empty($keyword) ? $tweet->searchByQuery(($keyword)) : $tweet->getAllTweets();
+
+        $userId = Auth::id();
+        foreach ($allTweets as $tweet) {
+            $tweet->isFavorite = $tweet->isFavorite($userId);
         }
         return view('tweets.index', compact('allTweets', 'keyword'));
     }
@@ -50,7 +53,9 @@ class TweetController extends Controller
     public function findByTweetId(int $tweetId): View
     {
         $tweetModel = new Tweet();
+        $userId = Auth::id();
         $tweet = $tweetModel->findByTweetId($tweetId);
+        $tweet->isFavorite = $tweet->isFavorite($userId);
 
         return view('tweets.show', compact('tweet'));
     }
@@ -73,5 +78,22 @@ class TweetController extends Controller
         $tweet = new Tweet();
         $tweet->deleteTweet($tweetId);
         return redirect()->route('tweets.index');
+    }
+
+    /**
+     * ツイートにいいねする
+     */
+    public function favorite(Request $request): JsonResponse
+    {
+        $tweetId = $request->tweetId;
+        $tweet = Tweet::find($tweetId);
+        $userId = Auth::id();
+
+        $tweet->favoriteTweet($userId);
+        $tweetFavoritesCount = $tweet->favorites()->count();
+        $json = [
+            'tweetFavoritesCount' => $tweetFavoritesCount,
+        ];
+        return response()->json($json);
     }
 }
