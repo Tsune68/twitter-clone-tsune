@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 
@@ -21,6 +22,13 @@ class Tweet extends Model
     {
         return $this->belongsTo('App\Models\User');
     }
+
+    // いいね（favorites)テーブルにリレーション張る
+    public function favorites(): BelongsToMany
+    {
+        return $this->belongsToMany('App\Models\User', 'favorites', 'tweet_id', 'user_id');
+    }
+
 
     /**
      * ツイートをtweetsテーブルに保存する
@@ -84,6 +92,26 @@ class Tweet extends Model
                 $searchdTweet = Tweet::orWhere('tweet', 'like', "%$keyword%")->get();
             }
             return $searchdTweet;
+        }
+    }
+
+    /**
+     * いいねしているかを調べる
+     */
+    public function isFavorite(int $userId): bool
+    {
+        return $this->favorites()->where('user_id', $userId)->exists();
+    }
+
+    /**
+     * いいねする
+     */
+    public function favoriteTweet(int $userId): void
+    {
+        if($this->isFavorite($userId)) {
+            $this->favorites()->detach($userId);
+        } else {
+            $this->favorites()->attach($userId);
         }
     }
 }

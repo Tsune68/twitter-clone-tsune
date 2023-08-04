@@ -13,6 +13,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Follower;
 
 class User extends Authenticatable
 {
@@ -66,7 +67,6 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Models\User', 'followers', 'follower_user_id', 'follow_user_id');
     }
-
 
     /**
      * 特定のユーザーを取得
@@ -167,5 +167,4 @@ class User extends Authenticatable
         $allFollows = $userInfo->follows;
         return $allFollows;
     }
-
 }

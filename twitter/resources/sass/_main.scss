@@ -1,0 +1,74 @@
+.container h1 {
+    margin: 30px 0;
+}
+
+.update-modal input {
+    display: block;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.tweet-card-link {
+    display: block;
+    transition: 0.2s;
+    position: relative;
+    color: #333;
+}
+
+.card-title {
+    display: flex;
+    align-items: center;
+}
+
+.card-title .text-secondary {
+    font-size: 12px;
+    margin-left: 15px;
+}
+
+.tweet-card-link:hover {
+    opacity: 0.5;
+}
+
+.tweet-card {
+    position: relative;
+}
+
+.tweet-dropdown {
+    position: absolute;
+    right: 20px;
+}
+
+.dots-leader {
+    text-decoration: none;
+}
+
+.dots-leader::after {
+    content: "\2026";
+    color: #333;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.tweet-textarea {
+    width: 100%;
+    min-height: 150px;
+}
+
+.search-form {
+    position: relative;
+    margin-bottom: 50px;
+}
+
+.search-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.js-favorite-toggle i{
+    color: gray;
+}
+
+.loved i {
+    color: red !important;
+}
