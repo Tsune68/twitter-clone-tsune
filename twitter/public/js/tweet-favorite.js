@@ -18,10 +18,10 @@ $(function () {
                 'tweetId': favoriteTweetId
             },
         })
-
-            .done(function (data) {
-                $this.toggleClass('loved');
-                $this.next('.favoritesCount').html(data.tweetFavoritesCount);
-            })
+        
+        .done(function (data) {
+            $this.toggleClass('loved');
+            $this.next('.favoritesCount').html(data.tweetFavoritesCount);
+        })
     });
 });
