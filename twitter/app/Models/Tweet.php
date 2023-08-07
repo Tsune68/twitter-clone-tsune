@@ -91,6 +91,7 @@ class Tweet extends Model
             foreach($keywordArray as $keyword) {
                 $searchdTweet = Tweet::orWhere('tweet', 'like', "%$keyword%")->get();
             }
+
             return $searchdTweet;
         }
     }
@@ -108,11 +109,9 @@ class Tweet extends Model
      */
     public function favoriteTweet(int $userId): void
     {
-        if($this->isFavorite($userId)) {
-            $this->favorites()->detach($userId);
-        } else {
-            $this->favorites()->attach($userId);
-        }
+        $this->isFavorite($userId) 
+            ? $this->favorites()->detach($userId) 
+            : $this->favorites()->attach($userId);
     }
 
     /**

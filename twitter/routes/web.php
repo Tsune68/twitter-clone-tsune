@@ -24,22 +24,26 @@ Auth::routes();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/users', [App\Http\Controllers\UserController::class, 'showAllUsers'])->name('users.index');
-    Route::get('/users/{id}', [App\Http\Controllers\UserController::class, 'findByUserId'])->name('users.show');
-    Route::put('/users/{id}', [App\Http\Controllers\UserController::class, 'update'])->name('users.update');
-    Route::delete('/users/{id}', [App\Http\Controllers\UserController::class, 'delete'])->name('users.delete');
-    Route::post('/users/follow/{id}', [App\Http\Controllers\UserController::class, 'follow'])->name('users.follow');
-    Route::post('/users/unfollow/{id}', [App\Http\Controllers\UserController::class, 'unfollow'])->name('users.unfollow');
-    Route::get('/users/followers/{id}', [App\Http\Controllers\UserController::class, 'showAllfollowers'])->name('users.followers');
-    Route::get('/users/follows/{id}', [App\Http\Controllers\UserController::class, 'showAllfollows'])->name('users.follows');
+    Route::group(['prefix' => 'users', 'as' => 'users.'], function() {
+        Route::get('/', [App\Http\Controllers\UserController::class, 'showAllUsers'])->name('index');
+        Route::get('{id}', [App\Http\Controllers\UserController::class, 'findByUserId'])->name('show');
+        Route::put('{id}', [App\Http\Controllers\UserController::class, 'update'])->name('update');
+        Route::delete('{id}', [App\Http\Controllers\UserController::class, 'delete'])->name('delete');
+        Route::post('follow/{id}', [App\Http\Controllers\UserController::class, 'follow'])->name('follow');
+        Route::post('unfollow/{id}', [App\Http\Controllers\UserController::class, 'unfollow'])->name('unfollow');
+        Route::get('followers/{id}', [App\Http\Controllers\UserController::class, 'showAllfollowers'])->name('followers');
+        Route::get('follows/{id}', [App\Http\Controllers\UserController::class, 'showAllfollows'])->name('follows');    
+    });
 
-    Route::get('/tweets/create', [App\Http\Controllers\TweetController::class, 'create'])->name('tweets.create');
-    Route::post('/tweets', [App\Http\Controllers\TweetController::class, 'store'])->name('tweets.store');
-    Route::get('/tweets', [App\Http\Controllers\TweetController::class, 'index'])->name('tweets.index');
-    Route::get('/tweets/{id}', [App\Http\Controllers\TweetController::class, 'findByTweetId'])->name('tweets.show');
-    Route::post('/tweets/{id}', [App\Http\Controllers\TweetController::class, 'update'])->name('tweets.update');
-    Route::delete('/tweets/{id}', [App\Http\Controllers\TweetController::class, 'delete'])->name('tweets.delete');
-    Route::get('/tweets/search', [App\Http\Controllers\TweetController::class, 'search'])->name('tweets.search');
-    Route::post('/tweets/favorite/{id}', [App\Http\Controllers\TweetController::class, 'favorite'])->name('tweets.favorite');
-    Route::get('/tweets/favorite/{id}', [App\Http\Controllers\TweetController::class, 'showAllFavoriteTweets'])->name('tweets.favorites');
+    Route::group(['prefix' => 'tweets', 'as' => 'tweets.'], function() {
+        Route::post('/', [App\Http\Controllers\TweetController::class, 'store'])->name('store');
+        Route::get('/', [App\Http\Controllers\TweetController::class, 'index'])->name('index');
+        Route::get('create', [App\Http\Controllers\TweetController::class, 'create'])->name('create');
+        Route::get('{id}', [App\Http\Controllers\TweetController::class, 'findByTweetId'])->name('show');
+        Route::post('{id}', [App\Http\Controllers\TweetController::class, 'update'])->name('update');
+        Route::delete('{id}', [App\Http\Controllers\TweetController::class, 'delete'])->name('delete');
+        Route::get('search', [App\Http\Controllers\TweetController::class, 'search'])->name('search');
+        Route::post('favorite/{id}', [App\Http\Controllers\TweetController::class, 'favorite'])->name('favorite');
+        Route::get('favorite/{id}', [App\Http\Controllers\TweetController::class, 'showAllFavoriteTweets'])->name('favorites');    
+    });
 });
