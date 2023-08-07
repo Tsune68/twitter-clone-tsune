@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 
 class Tweet extends Model
 {
@@ -91,6 +91,7 @@ class Tweet extends Model
             foreach($keywordArray as $keyword) {
                 $searchdTweet = Tweet::orWhere('tweet', 'like', "%$keyword%")->get();
             }
+
             return $searchdTweet;
         }
     }
@@ -108,10 +109,24 @@ class Tweet extends Model
      */
     public function favoriteTweet(int $userId): void
     {
-        if($this->isFavorite($userId)) {
-            $this->favorites()->detach($userId);
-        } else {
-            $this->favorites()->attach($userId);
-        }
+        $this->isFavorite($userId) 
+            ? $this->favorites()->detach($userId) 
+            : $this->favorites()->attach($userId);
     }
+
+    /**
+     * いいねしたツイートを全て取得
+     * 
+     * @param int $userId
+     * @return Collection
+     */
+    public function getAllFavoriteTweets(int $userId): Collection
+    {
+        $user = new User();
+        $userInfo = $user->findByUserId($userId);
+        $AllFavoriteTweets = $userInfo->favorites;
+        
+        return $AllFavoriteTweets;
+    }
+
 }

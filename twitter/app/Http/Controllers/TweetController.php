@@ -26,6 +26,7 @@ class TweetController extends Controller
         foreach ($allTweets as $tweet) {
             $tweet->isFavorite = $tweet->isFavorite($userId);
         }
+        
         return view('tweets.index', compact('allTweets', 'keyword'));
     }
 
@@ -44,6 +45,7 @@ class TweetController extends Controller
     {
         $tweet = new Tweet();
         $tweet->saveTweet($request);
+
         return redirect()->route('tweets.index');
     }
 
@@ -67,6 +69,7 @@ class TweetController extends Controller
     {
         $tweet = new Tweet();
         $tweet->updateTweet($tweetId, $request);
+
         return redirect()->route('tweets.index');
     }
 
@@ -77,6 +80,7 @@ class TweetController extends Controller
     {
         $tweet = new Tweet();
         $tweet->deleteTweet($tweetId);
+
         return redirect()->route('tweets.index');
     }
 
@@ -94,6 +98,23 @@ class TweetController extends Controller
         $json = [
             'tweetFavoritesCount' => $tweetFavoritesCount,
         ];
+
         return response()->json($json);
+    }
+
+    /**
+     * いいねした投稿全てを表示
+     * 
+     * @param int $userId
+     * @return View
+     */
+    public function showAllFavoriteTweets(Tweet $tweet, int $userId): View
+    {
+        $AllFavoriteTweets = $tweet->getAllFavoriteTweets($userId);
+        foreach ($AllFavoriteTweets as $tweet) {
+            $tweet->isFavorite = $tweet->isFavorite($userId);
+        }
+
+        return view('tweets.favorite', compact('AllFavoriteTweets'));
     }
 }

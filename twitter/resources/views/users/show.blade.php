@@ -27,6 +27,12 @@
             {{ $userInfo->follows->count() }}フォロー
         </a>
     </p>
+    <p class="border-bottom">
+        いいね:
+        <a href="{{ route('tweets.favorites', ['id' => $userInfo->id]) }}">
+            {{ $userInfo->favorites->count() }}いいね
+        </a>
+    </p>
 </div>
 
 <body>
