@@ -103,9 +103,8 @@ class TweetController extends Controller
      * @param int $userId
      * @return View
      */
-    public function showAllFavoriteTweets(int $userId): View
+    public function showAllFavoriteTweets(Tweet $tweet, int $userId): View
     {
-        $tweet = new Tweet();
         $AllFavoriteTweets = $tweet->getAllFavoriteTweets($userId);
         foreach ($AllFavoriteTweets as $tweet) {
             $tweet->isFavorite = $tweet->isFavorite($userId);

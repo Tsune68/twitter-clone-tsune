@@ -59,18 +59,33 @@ class User extends Authenticatable
     // followersテーブルにリレーション張る（フォローしている人を取得）
     public function follows(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\User', 'followers', 'follow_user_id', 'follower_user_id');
+        return $this->belongsToMany(
+            'App\Models\User', 
+            'followers', 
+            'follow_user_id', 
+            'follower_user_id'
+        );
     }
 
     // followersテーブルにリレーション張る（自分のことをフォローしている人を取得）
     public function followers(): BelongsToMany
     {
-        return $this->belongsToMany('App\Models\User', 'followers', 'follower_user_id', 'follow_user_id');
+        return $this->belongsToMany(
+            'App\Models\User', 
+            'followers', 
+            'follower_user_id', 
+            'follow_user_id'
+        );
     }
 
     // favoritesテーブルにリレーション張る
     public function favorites(): BelongsToMany {
-        return $this->belongsToMany('App\Models\Tweet', 'favorites', 'user_id', 'tweet_id');
+        return $this->belongsToMany(
+            'App\Models\Tweet', 
+            'favorites', 
+            'user_id', 
+            'tweet_id'
+        );
     }
 
     /**

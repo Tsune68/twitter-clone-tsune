@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use Illuminate\Http\Request;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\User;
 
 class Tweet extends Model
 {
@@ -126,6 +126,7 @@ class Tweet extends Model
         $user = new User();
         $userInfo = $user->findByUserId($userId);
         $AllFavoriteTweets = $userInfo->favorites;
+        
         return $AllFavoriteTweets;
     }
 
