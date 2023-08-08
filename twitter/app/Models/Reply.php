@@ -17,7 +17,7 @@ class Reply extends Model
      * リプライを保存する
      *
      * @param integer $tweetID
-     * @param Request $request
+     * @param string $replyMessage
      * @return void
      */
     public function saveReply(int $tweetID, string $replyMessage): void
