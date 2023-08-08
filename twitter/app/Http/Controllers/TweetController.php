@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Requests\CreateTweetRequest;
-use Illuminate\Contracts\View\View;
-use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\CreateReplyRequest;
+use App\Models\Reply;
 use App\Models\Tweet;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Contracts\View\View;
 
 class TweetController extends Controller
 {
@@ -117,4 +119,26 @@ class TweetController extends Controller
 
         return view('tweets.favorite', compact('AllFavoriteTweets'));
     }
+
+    /**
+     * リプライを保存する
+     *
+     * @param CreateReplyRequest $request
+     * @param Reply $reply
+     * @param integer $tweetId
+     * @return RedirectResponse
+     */
+    public function storeReply(
+        CreateReplyRequest $request,
+        Reply $reply,
+        int $tweetId,
+    ): RedirectResponse
+
+    {
+        $replyMessage = $request->reply;
+        $reply->saveReply($tweetId, $replyMessage);
+
+        return redirect()->route('tweets.index');
+    }
+
 }

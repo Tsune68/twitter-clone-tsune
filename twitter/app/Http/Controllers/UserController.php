@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Contracts\View\View;
 use App\Models\User;
+use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Gate;
@@ -31,9 +33,21 @@ class UserController extends Controller
      */
     public function update(UpdateUserRequest $request, int $userId): RedirectResponse
     {
-        $user = new User();
-        $user->updateUser($userId, $request);
-        return redirect()->route('users.show', ['id' => $userId]);
+        DB::beginTransaction();
+        try {
+            $user = new User();
+            $request = $request->only(['name', 'email']);
+            $user->updateUser($userId, $request);
+            DB::commit();
+
+            return redirect()->route('users.show', ['id' => $userId]);
+
+        } catch (Exception $e) {
+            DB::rollback();
+            info($e->getMessage());
+            
+            return redirect()->route('tweets.index');
+        }
     }
 
     /**
@@ -43,6 +57,7 @@ class UserController extends Controller
     {
         $user = new User();
         $user->deleteUser($userId);
+
         return redirect()->route('home');
     }
 
@@ -53,6 +68,7 @@ class UserController extends Controller
     {
         $user = new User();
         $allUsers = $user->getAllUsers();
+
         return view('users.index', compact('allUsers'));
     }
 
@@ -63,6 +79,7 @@ class UserController extends Controller
     {
         $user = new User();
         $user->follow($userId);
+
         return redirect()->route('users.index');
     }
 
@@ -73,6 +90,7 @@ class UserController extends Controller
     {
         $user = new User();
         $user->unfollow($userId);
+
         return redirect()->route('users.index');
     }
 

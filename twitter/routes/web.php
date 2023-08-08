@@ -44,6 +44,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('{id}', [App\Http\Controllers\TweetController::class, 'delete'])->name('delete');
         Route::get('search', [App\Http\Controllers\TweetController::class, 'search'])->name('search');
         Route::post('favorite/{id}', [App\Http\Controllers\TweetController::class, 'favorite'])->name('favorite');
-        Route::get('favorite/{id}', [App\Http\Controllers\TweetController::class, 'showAllFavoriteTweets'])->name('favorites');    
+        Route::get('favorite/{id}', [App\Http\Controllers\TweetController::class, 'showAllFavoriteTweets'])->name('favorites'); 
+        Route::post('reply/{id}', [App\Http\Controllers\TweetController::class, 'storeReply'])->name('reply');   
     });
 });

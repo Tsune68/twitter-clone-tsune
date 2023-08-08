@@ -102,20 +102,10 @@ class User extends Authenticatable
     /**
      * ユーザー情報の更新
      */
-    public function updateUser(int $userId, Request $request): void
+    public function updateUser(int $userId, array $request): void
     {
         $userInfo = $this->findByUserId($userId);
-        $userInfo->name = $request->name;
-        $userInfo->email = $request->email;
-
-        //変更があった箇所だけ保存する
-        if ($userInfo->isDirty(['name', 'email'])) {
-            $userInfo->save();
-        } elseif ($userInfo->isDirty('name')) {
-            $userInfo->save(['name']);
-        } elseif ($userInfo->isDirty('email')) {
-            $userInfo->save(['email']);
-        }
+        $userInfo -> fill($request)->save();
     }
 
     /**
@@ -124,6 +114,7 @@ class User extends Authenticatable
     public function getAllUsers(): Collection
     {
         $allUsers = User::all()->sortByDesc('created_at');
+
         return $allUsers;
     }
 
@@ -147,6 +138,7 @@ class User extends Authenticatable
             'follow_user_id' => $user->id,
             'follower_user_id' => $follower->id,
         ]);
+
         return true;
     }
 
@@ -163,8 +155,10 @@ class User extends Authenticatable
 
         if ($record) {
             $record->delete();
+
             return true;
         }
+
         return false;
     }
 
@@ -175,6 +169,7 @@ class User extends Authenticatable
     {
         $userInfo = $this->findByUserId($userId);
         $allFollowers = $userInfo->followers;
+
         return $allFollowers;
     }
 
@@ -185,6 +180,7 @@ class User extends Authenticatable
     {
         $userInfo = $this->findByUserId($userId);
         $allFollows = $userInfo->follows;
+        
         return $allFollows;
     }
 }
