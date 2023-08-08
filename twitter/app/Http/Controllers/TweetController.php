@@ -123,11 +123,17 @@ class TweetController extends Controller
     /**
      * リプライを保存する
      *
-     * @param Comment $comment
      * @param CreateReplyRequest $request
+     * @param Reply $reply
+     * @param integer $tweetId
      * @return RedirectResponse
      */
-    public function storeReply(Reply $reply, int $tweetId, CreateReplyRequest $request): RedirectResponse
+    public function storeReply(
+        CreateReplyRequest $request,
+        Reply $reply,
+        int $tweetId,
+    ): RedirectResponse
+
     {
         $replyMessage = $request->reply;
         $reply->saveReply($tweetId, $replyMessage);
