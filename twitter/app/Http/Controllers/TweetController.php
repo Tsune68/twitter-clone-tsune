@@ -53,6 +53,10 @@ class TweetController extends Controller
 
     /**
      * ツイート詳細を表示する
+     *
+     * @param Tweet $tweet
+     * @param integer $tweetId
+     * @return View
      */
     public function findByTweetId(Tweet $tweet, int $tweetId): View
     {

@@ -140,6 +140,12 @@ class Tweet extends Model
         return $AllFavoriteTweets;
     }
 
+    /**
+     * リプライを取得する
+     *
+     * @param integer $tweetId
+     * @return Collection
+     */
     public function getReplies(int $tweetId): Collection
     {
         $tweet = $this->findByTweetId($tweetId);
