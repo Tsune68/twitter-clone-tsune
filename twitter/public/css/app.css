@@ -22375,3 +22375,8 @@ readers do not read off random characters that represent icons */
 .loved i {
   color: red !important;
 }
+
+.reply-icon.dropdown-item {
+  display: inline;
+  margin-left: 10px;
+}

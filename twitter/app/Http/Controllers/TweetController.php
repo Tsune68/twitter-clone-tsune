@@ -54,14 +54,14 @@ class TweetController extends Controller
     /**
      * ツイート詳細を表示する
      */
-    public function findByTweetId(int $tweetId): View
+    public function findByTweetId(Tweet $tweet, int $tweetId): View
     {
-        $tweetModel = new Tweet();
         $userId = Auth::id();
-        $tweet = $tweetModel->findByTweetId($tweetId);
+        $replies = $tweet->getReplies($tweetId);
+        $tweet = $tweet->findByTweetId($tweetId);
         $tweet->isFavorite = $tweet->isFavorite($userId);
 
-        return view('tweets.show', compact('tweet'));
+        return view('tweets.show', compact('tweet', 'replies'));
     }
 
     /**

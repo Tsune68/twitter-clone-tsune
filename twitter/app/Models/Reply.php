@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -12,7 +13,26 @@ class Reply extends Model
 
     protected $fillable = ['reply', 'user_id', 'tweet_id'];
 
+    /**
+     * リプライが関連するツイートを取得
+     *
+     * @return BelongsTo
+     */
+    public function tweet(): BelongsTo
+    {
+        return $this->belongsTo('App\Models\Tweet');
+    }
     
+    /**
+     * リプライが関連するユーザーを取得
+     *
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo('App\Models\User');
+    }
+
     /**
      * リプライを保存する
      *

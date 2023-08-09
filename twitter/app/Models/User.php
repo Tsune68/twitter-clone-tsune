@@ -79,13 +79,24 @@ class User extends Authenticatable
     }
 
     // favoritesテーブルにリレーション張る
-    public function favorites(): BelongsToMany {
+    public function favorites(): BelongsToMany 
+    {
         return $this->belongsToMany(
             'App\Models\Tweet', 
             'favorites', 
             'user_id', 
             'tweet_id'
         );
+    }
+
+    /**
+     * ユーザーが投稿したリプライを取得
+     *
+     * @return HasMany
+     */
+    public function replies(): HasMany
+    {
+        return $this->hasMany('App\Models\Reply');
     }
 
     /**
