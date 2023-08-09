@@ -16,9 +16,10 @@
                 <i class="fas fa-heart"></i>
             </a>
             <span class="favoritesCount">{{ $tweet->favorites()->count() }}</span>
-            <a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#reply-modal-{{ $tweet->id }}"
+            <a class="dropdown-item reply-icon" data-bs-toggle="modal" data-bs-target="#reply-modal-{{ $tweet->id }}"
                 href="#">
                 <i class="far fa-comment"></i>
+                <span class="favoritesCount">{{ $tweet->replies()->count() }}</span>
             </a>
         </div>
     </div>

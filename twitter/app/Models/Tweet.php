@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -29,6 +30,16 @@ class Tweet extends Model
         return $this->belongsToMany('App\Models\User', 'favorites', 'tweet_id', 'user_id');
     }
 
+
+    /**
+     * Tweetに関連するリプライを取得する
+     *
+     * @return HasMany
+     */
+    public function replies(): HasMany
+    {
+        return $this->hasMany('App\Models\Reply');
+    }
 
     /**
      * ツイートをtweetsテーブルに保存する
@@ -127,6 +138,20 @@ class Tweet extends Model
         $AllFavoriteTweets = $userInfo->favorites;
         
         return $AllFavoriteTweets;
+    }
+
+    /**
+     * リプライを取得する
+     *
+     * @param integer $tweetId
+     * @return Collection
+     */
+    public function getReplies(int $tweetId): Collection
+    {
+        $tweet = $this->findByTweetId($tweetId);
+        $replies = $tweet->replies;
+        
+        return $replies;
     }
 
 }
