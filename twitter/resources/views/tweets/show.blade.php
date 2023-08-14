@@ -2,14 +2,21 @@
 @section('content')
 
     <body>
+        <!-- フラッシュメッセージ -->
+        @if (session('flash_message'))
+            <div class="flash_message danger">
+                {{ session('flash_message') }}
+            </div>
+        @endif
         <h1>ツイート詳細</h1>
+        <!-- バリデーションエラーメッセージ -->
         @if ($errors->any())
-        <ul>
-            @foreach ($errors->all() as $error)
-            <li class="error_message">{{ $error }}</li>
-            @endforeach
-        </ul>
-        @endif  
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li class="error_message">{{ $error }}</li>
+                @endforeach
+            </ul>
+        @endif
         @include('components.tweet-card')
         @foreach ($replies as $reply)
             <div class="card tweet-card text-dark bg-light mb-3">
