@@ -48,4 +48,41 @@ class Reply extends Model
         $this->save();
     }
 
+    /**
+     * 特定のリプライを取得する
+     *
+     * @param integer $replyId
+     * @return Reply
+     */
+    public function findReply(int $replyId): Reply
+    {
+        $replyDetail = $this->find($replyId);
+
+        return $replyDetail;
+    }
+
+    /**
+     * リプライを削除する
+     *
+     * @param integer $replyId
+     * @return void
+     */
+    public function deleteReply(int $replyId): void
+    {
+        $this->destroy($replyId);
+    }
+
+    /**
+     * リプライを更新する
+     *
+     * @param integer $replyId
+     * @param string $replyMessage
+     * @return void
+     */
+    public function updateReply(int $replyId, string $replyMessage): void
+    {
+        $replyDetail = $this->findReply($replyId);
+        $replyDetail->reply = $replyMessage;
+        $replyDetail->save();
+    }
 }

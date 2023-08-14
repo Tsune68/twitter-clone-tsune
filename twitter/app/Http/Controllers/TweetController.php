@@ -6,8 +6,10 @@ use App\Http\Requests\CreateTweetRequest;
 use App\Http\Requests\CreateReplyRequest;
 use App\Models\Reply;
 use App\Models\Tweet;
+use Throwable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
@@ -28,7 +30,7 @@ class TweetController extends Controller
         foreach ($allTweets as $tweet) {
             $tweet->isFavorite = $tweet->isFavorite($userId);
         }
-        
+
         return view('tweets.index', compact('allTweets', 'keyword'));
     }
 
@@ -136,13 +138,60 @@ class TweetController extends Controller
         CreateReplyRequest $request,
         Reply $reply,
         int $tweetId,
-    ): RedirectResponse
-
-    {
+    ): RedirectResponse {
         $replyMessage = $request->reply;
         $reply->saveReply($tweetId, $replyMessage);
 
-        return redirect()->route('tweets.index');
+        return redirect()->route('tweets.show', ['id' => $tweetId]);
     }
 
+    /**
+     * リプライを削除する
+     *
+     * @param Reply $reply
+     * @param integer $replyId
+     * @return RedirectResponse
+     */
+    public function deleteReply(Reply $reply, int $replyId): RedirectResponse
+    {
+        try {
+            $replyDetail = $reply->findReply($replyId);
+            $tweetId = $replyDetail->tweet->id;    
+            $reply->deleteReply($replyId);
+        } catch (Throwable $e) {
+            Log::error($e->getMessage());
+
+            return redirect()->route('tweets.index')
+                ->with('flash_message', '予期せぬエラーが発生しました。もう一度やり直してください。');
+        }
+
+        return redirect()->route('tweets.show',['id' => $tweetId])
+            ->with('flash_message', 'リプライの削除が完了しました！');
+    }
+
+    /**
+     * リプライを編集する
+     *
+     * @param CreateReplyRequest $request
+     * @param Reply $reply
+     * @param integer $replyId
+     * @return RedirectResponse
+     */
+    public function updateReply(CreateReplyRequest $request, Reply $reply, int $replyId): RedirectResponse
+    {
+        try {
+            $replyDetail = $reply->findReply($replyId);
+            $tweetId = $replyDetail->tweet->id;
+            $replyMessage = $request->reply;    
+            $reply->updateReply($replyId, $replyMessage);
+        } catch(Throwable $e) {
+            Log::error($e->getMessage());
+
+            return redirect()->route('tweets.index')
+                ->with('flash_message', '予期せぬエラーが発生しました。もう一度やり直してください。');
+        }
+
+        return redirect()->route('tweets.show', ['id' => $tweetId])
+            ->with('flash_message', 'リプライの編集に成功しました！');
+    }
 }
