@@ -3,6 +3,13 @@
 
     <body>
         <h1>ツイート詳細</h1>
+        @if ($errors->any())
+        <ul>
+            @foreach ($errors->all() as $error)
+            <li class="error_message">{{ $error }}</li>
+            @endforeach
+        </ul>
+        @endif  
         @include('components.tweet-card')
         @foreach ($replies as $reply)
             <div class="card tweet-card text-dark bg-light mb-3">
