@@ -9,6 +9,7 @@ use App\Models\Tweet;
 use Throwable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
@@ -158,7 +159,7 @@ class TweetController extends Controller
             $tweetId = $replyDetail->tweet->id;    
             $reply->deleteReply($replyId);
         } catch (Throwable $e) {
-            info($e->getMessage());
+            Log::error($e->getMessage());
 
             return redirect()->route('tweets.index')
                 ->with('flash_message', '予期せぬエラーが発生しました。もう一度やり直してください。');
@@ -184,7 +185,7 @@ class TweetController extends Controller
             $replyMessage = $request->reply;    
             $reply->updateReply($replyId, $replyMessage);
         } catch(Throwable $e) {
-            info($e->getMessage());
+            Log::error($e->getMessage());
 
             return redirect()->route('tweets.index')
                 ->with('flash_message', '予期せぬエラーが発生しました。もう一度やり直してください。');
