@@ -145,4 +145,33 @@ class TweetController extends Controller
         return redirect()->route('tweets.index');
     }
 
+    /**
+     * リプライを削除する
+     *
+     * @param Reply $reply
+     * @param integer $replyId
+     * @return void
+     */
+    public function deleteReply(Reply $reply, int $replyId)
+    {
+        $reply->deleteReply($replyId);
+
+        return redirect()->route('tweets.index');
+    }
+
+    /**
+     * リプライを編集する
+     *
+     * @param CreateReplyRequest $request
+     * @param Reply $reply
+     * @param integer $replyId
+     * @return void
+     */
+    public function updateReply(CreateReplyRequest $request, Reply $reply, int $replyId)
+    {
+        $replyMessage = $request->reply;
+        $reply->updateReply($replyId, $replyMessage);
+
+        return redirect()->route('tweets.index');
+    }
 }

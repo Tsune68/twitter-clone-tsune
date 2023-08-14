@@ -153,5 +153,4 @@ class Tweet extends Model
         
         return $replies;
     }
-
 }
