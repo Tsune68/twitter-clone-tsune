@@ -45,12 +45,26 @@ class TweetController extends Controller
     /**
      * ツイートを保存する
      */
-    public function store(CreateTweetRequest $request): RedirectResponse
+    public function store(CreateTweetRequest $request, Tweet $tweet): RedirectResponse
     {
-        $tweet = new Tweet();
-        $tweet->saveTweet($request);
+        $imagePath = null;
+        $tweetText = $request->tweet;
+        $userId = $request->user()->id;
+        try {
+            if ($request->file('image')) {
+                $filePath = $request->file('image')->store('public/tweet-image');
+                $imagePath = str_replace('public/tweet-image' , 'storage/tweet-image' , $filePath);    
+            }
+            $tweet->saveTweet($tweetText, $userId, $imagePath);    
+        } catch(Throwable $e) {
+            Log::error($e->getMessage());
 
-        return redirect()->route('tweets.index');
+            return redirect()->route('tweets.index')
+                ->with('flash_message', '予期せぬエラーが発生しました。もう一度やり直してください。');
+        }
+
+        return redirect()->route('tweets.index')
+            ->with('flash_message', 'ツイートが完了しました！');
     }
 
     /**

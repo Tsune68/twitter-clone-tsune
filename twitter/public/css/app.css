@@ -22380,3 +22380,8 @@ readers do not read off random characters that represent icons */
   display: inline;
   margin-left: 10px;
 }
+
+.tweet-image {
+  display: block;
+  width: 40%;
+}

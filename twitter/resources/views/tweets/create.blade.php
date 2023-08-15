@@ -14,11 +14,14 @@
     </div>
 
 
-    <form id="store" method="POST" action="{{ route('tweets.store') }}">
+    <form id="store" method="POST" action="{{ route('tweets.store') }}" enctype="multipart/form-data">
         @csrf
         <div class="mb-2">
             <label class="form-label" for="tweet">ツイート内容</label>
             <textarea class="form-control" name="tweet" id="tweet"></textarea>
+        </div>
+        <div>
+            <input type="file" name="image">
         </div>
         <button type="submit" form="store" class="btn btn-primary">ツイートする</button>
     </form>
