@@ -9,11 +9,11 @@ class ImagePath
     /**
      * アップロードされた画像のパスを取得
      *
-     * @param UploadedFile|null $imageFile
+     * @param UploadedFile $imageFile
      * @param string $directoryName
      * @return string
      */
-    public function getImagePath(?UploadedFile $imageFile, string $directoryName): string
+    public function getImagePath(UploadedFile $imageFile, string $directoryName): string
     {
         $filePath = $imageFile->store("public/{$directoryName}");
         $imageFilePath = str_replace("public/{$directoryName}", "storage/{$directoryName}", $filePath);
