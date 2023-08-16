@@ -25,6 +25,7 @@ class CreateTweetRequest extends FormRequest
     {
         return [
             'tweet' => 'required|string|max:140',
+            'image' => 'max:100000|mimes:jpg,jpeg,png,gif',
         ];
     }
 
@@ -33,7 +34,9 @@ class CreateTweetRequest extends FormRequest
         return [
             'tweet.required' => 'ツイートは必須項目です',
             'tweet.string' => '文字でお願いします',
-            'tweet.max' => 'ツイートは140字以内でお願いします。'
+            'tweet.max' => 'ツイートは140字以内でお願いします。',
+            'image.max' => 'ファイルが大きすぎます。100MB以下でお願いします。' ,
+            'image.mimes' => 'jpg,jpeg,png,gifのどれかでお願いします。',
         ];
     }
 

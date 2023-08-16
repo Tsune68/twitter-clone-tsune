@@ -10,6 +10,9 @@
                 <small class="text-secondary">（編集済み）</small>
             @endif
         </p>
+        @if ($tweet->image_path)
+            <img src="{{ asset($tweet->image_path) }}" class="tweet-image"/>
+        @endif
         <div class="favorite-marke">
             <a class="js-favorite-toggle {{ $tweet->isFavorite ? 'loved' : '' }}" href=""
                 data-tweetid="{{ $tweet->id }}">

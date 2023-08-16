@@ -6,6 +6,7 @@ use App\Http\Requests\CreateTweetRequest;
 use App\Http\Requests\CreateReplyRequest;
 use App\Models\Reply;
 use App\Models\Tweet;
+use App\Services\ImagePath;
 use Throwable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\JsonResponse;
@@ -45,12 +46,28 @@ class TweetController extends Controller
     /**
      * ツイートを保存する
      */
-    public function store(CreateTweetRequest $request): RedirectResponse
+    public function store(CreateTweetRequest $request, Tweet $tweet, ImagePath $imagePath): RedirectResponse
     {
-        $tweet = new Tweet();
-        $tweet->saveTweet($request);
+        $tweetText = $request->tweet;
+        $userId = $request->user()->id;
+        $imageFilePath = null;
+        try {
+            if ($request->file('image')) {
+                $imageFilePath = $imagePath->saveImagePath(
+                    $request->file('image'), 
+                    config('directoryName.TWEET')
+                );
+            }
+            $tweet->saveTweet($tweetText, $userId, $imageFilePath);
+        } catch (Throwable $e) {
+            Log::error($e->getMessage());
 
-        return redirect()->route('tweets.index');
+            return redirect()->route('tweets.index')
+                ->with('flash_message', '予期せぬエラーが発生しました。もう一度やり直してください。');
+        }
+
+        return redirect()->route('tweets.index')
+            ->with('flash_message', 'ツイートが完了しました！');
     }
 
     /**
@@ -156,7 +173,7 @@ class TweetController extends Controller
     {
         try {
             $replyDetail = $reply->findReply($replyId);
-            $tweetId = $replyDetail->tweet->id;    
+            $tweetId = $replyDetail->tweet->id;
             $reply->deleteReply($replyId);
         } catch (Throwable $e) {
             Log::error($e->getMessage());
@@ -165,7 +182,7 @@ class TweetController extends Controller
                 ->with('flash_message', '予期せぬエラーが発生しました。もう一度やり直してください。');
         }
 
-        return redirect()->route('tweets.show',['id' => $tweetId])
+        return redirect()->route('tweets.show', ['id' => $tweetId])
             ->with('flash_message', 'リプライの削除が完了しました！');
     }
 

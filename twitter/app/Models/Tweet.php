@@ -16,6 +16,8 @@ class Tweet extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $fillable = ['tweet', 'user_id', 'image_path'];
+
     /**
      * ユーザーデーブルとリレーションをはる
      */
@@ -44,10 +46,11 @@ class Tweet extends Model
     /**
      * ツイートをtweetsテーブルに保存する
      */
-    public function saveTweet(Request $request): void
+    public function saveTweet(string $tweetText, int $userId, ?string $imagePath): void
     {
-        $this->tweet = $request->tweet;
-        $this->user_id = $request->user()->id;
+        $this->tweet = $tweetText;
+        $this->user_id = $userId;
+        $this->image_path = $imagePath;
         $this->save();
     }
 
