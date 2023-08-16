@@ -53,8 +53,9 @@ class TweetController extends Controller
         $imageFilePath = null;
         try {
             if ($request->file('image')) {
-                $imageFilePath = $imagePath->getImagePath(
-                    $request->file('image'), config('directoryName.tweet')
+                $imageFilePath = $imagePath->saveImagePath(
+                    $request->file('image'), 
+                    config('directoryName.TWEET')
                 );
             }
             $tweet->saveTweet($tweetText, $userId, $imageFilePath);

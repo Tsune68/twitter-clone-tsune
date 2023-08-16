@@ -1,6 +1,6 @@
 <?php
 
 return [
-    'tweet' => 'tweet-image',
-    'icon' => 'user-icon',
+    'TWEET' => 'tweet-image',
+    'ICON' => 'user-icon',
 ];
