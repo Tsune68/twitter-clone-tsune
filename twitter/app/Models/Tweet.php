@@ -44,6 +44,16 @@ class Tweet extends Model
     }
 
     /**
+     * リツートを取得する
+     *
+     * @return HasMany
+     */
+    public function retweets() : HasMany 
+    {
+        return $this->hasMany('App\Models\Retweet');
+    }
+
+    /**
      * ツイートをtweetsテーブルに保存する
      */
     public function saveTweet(string $tweetText, int $userId, ?string $imagePath): void
@@ -124,7 +134,7 @@ class Tweet extends Model
     public function favoriteTweet(int $userId): void
     {
         $this->isFavorite($userId) 
-            ? $this->favorites()->detach($userId) 
+            ? $this->favorites()->detach($userId)
             : $this->favorites()->attach($userId);
     }
 

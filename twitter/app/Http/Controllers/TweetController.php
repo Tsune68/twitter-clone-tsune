@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateTweetRequest;
 use App\Http\Requests\CreateReplyRequest;
 use App\Models\Reply;
+use App\Models\Retweet;
 use App\Models\Tweet;
 use App\Services\ImagePath;
 use Throwable;
@@ -23,14 +24,25 @@ class TweetController extends Controller
      */
     public function index(Request $request): View
     {
+        // \DB::enableQueryLog();
         $tweet = new Tweet();
+
         $keyword = $request->input('keyword');
         $allTweets = !empty($keyword) ? $tweet->searchByQuery(($keyword)) : $tweet->getAllTweets();
+        // $allTweets = $tweet->with(['retweets'])->get();
+        // dd($allTweets);
 
+        // if (!empty($keyword)) {
+        //     $allTweets = $allTweets->searchByQuery($keyword);
+        // }
+    
+        // $allTweets = $allTweets->get();
         $userId = Auth::id();
         foreach ($allTweets as $tweet) {
             $tweet->isFavorite = $tweet->isFavorite($userId);
         }
+
+        // dd(\DB::getQueryLog());
 
         return view('tweets.index', compact('allTweets', 'keyword'));
     }
@@ -101,9 +113,10 @@ class TweetController extends Controller
     /**
      * ツイート削除する
      */
-    public function delete(int $tweetId): RedirectResponse
+    public function delete(Tweet $tweet, int $tweetId): RedirectResponse
     {
-        $tweet = new Tweet();
+        $tweetInfo = $tweet->findByTweetId($tweetId);
+        $this->authorize('delete',$tweetInfo);
         $tweet->deleteTweet($tweetId);
 
         return redirect()->route('tweets.index');
@@ -210,5 +223,20 @@ class TweetController extends Controller
 
         return redirect()->route('tweets.show', ['id' => $tweetId])
             ->with('flash_message', 'リプライの編集に成功しました！');
+    }
+
+    /**
+     * リツイートする
+     *
+     * @param Retweet $retweet
+     * @param integer $tweetId
+     * @return void
+     */
+    public function retweet(Retweet $retweet, int $tweetId)
+    {
+        $userId = Auth::id();
+        $retweet->retweet($tweetId, $userId);
+
+        return redirect()->route('tweets.index');
     }
 }

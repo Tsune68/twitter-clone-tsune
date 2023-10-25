@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Follower;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -10,10 +11,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
-use App\Models\Follower;
 
 class User extends Authenticatable
 {
@@ -97,6 +96,16 @@ class User extends Authenticatable
     public function replies(): HasMany
     {
         return $this->hasMany('App\Models\Reply');
+    }
+
+    /**
+     * リツイートを取得する
+     *
+     * @return HasMany
+     */
+    public function retweets(): HasMany
+    {
+        return $this->hasMany('Apo\Models\Retweet');
     }
 
     /**

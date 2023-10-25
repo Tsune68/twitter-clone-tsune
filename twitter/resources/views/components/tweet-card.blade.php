@@ -24,6 +24,12 @@
                 <i class="far fa-comment"></i>
                 <span class="favoritesCount">{{ $tweet->replies()->count() }}</span>
             </a>
+            <form method="POST" action="{{ route('tweets.retweet', ['id' => $tweet->id]) }}" class="retweet">
+                @csrf
+                <button type="submit" class="retweet_btn">
+                    <i class="fa fa-retweet" aria-hidden="true"></i>
+                </button>
+            </form>
         </div>
     </div>
     @if (Auth::id() === $tweet->user->id)

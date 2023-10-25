@@ -22385,3 +22385,18 @@ readers do not read off random characters that represent icons */
   display: block;
   width: 40%;
 }
+
+.retweet {
+  display: inline;
+  margin-left: 10px;
+}
+.retweet_btn {
+  display: inline-block;
+  background: none;
+  border: none;
+  color: inherit;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: none;
+}

@@ -19,7 +19,7 @@
                     <td>
                         {{ $user->name }}
                         @if (Auth::id() !== $user->id)
-                            @if (Auth::user()->follows->contains('id', $user->id))
+                            @if (Auth::user()->follows->contains($user->id))
                             <form id="follow-{{ $user->id }}" method="POST" action="{{ route('users.unfollow', ['id' => $user->id]) }}">
                                 @csrf
                                 <button type="submit">
